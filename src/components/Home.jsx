@@ -69,8 +69,8 @@ const Home = () => {
             </p>
             <input
               type="text"
-              placeholder="Enter Your post title"
-              className=" p-5 capitalize text-center"
+              placeholder="title"
+              className=" p-5 capitalize"
               required
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
