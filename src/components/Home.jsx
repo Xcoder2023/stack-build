@@ -60,8 +60,8 @@ const Home = () => {
             </p>
             <input
               type="text"
-              placeholder="Enter Your post title"
-              className=" p-5 capitalize text-center"
+              placeholder="title"
+              className=" p-5 capitalize"
               required
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
@@ -78,9 +78,9 @@ const Home = () => {
         </div>
 
         {/* Display user data */}
-        <div className="text-white">
+        <div className="text-white flex gap-5">
           {userData.map((user) => (
-            <div key={user.id}>
+            <div key={user.id} className=" flex flex-col-reverse">
               <p>Title: {user.title}</p>
               <p>firstName: {user.firstName}</p>
               <p>lastName: {user.lastName}</p>
