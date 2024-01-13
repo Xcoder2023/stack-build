@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 const Home = () => {
   const [toggle, setToggle] = useState(false);
   const [userData, setUserData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const [postTitle, setPostTitle] = useState("");
 
   const handleToggle = () => setToggle(!toggle);
@@ -25,6 +27,13 @@ const Home = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const filteredResults = userData.filter((user) =>
+      user.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filteredResults);
+  }, [searchQuery, userData]);
+
   return (
     <>
       <div className=" bg-[url('/src/components/assets/skyblue.jpeg')] bg-center bg-cover bg-no-repeat h-[100vh] w-[100%]">
@@ -35,8 +44,8 @@ const Home = () => {
               placeholder="Enter post title"
               required
               className=" p-4 border-none w-[30%] capitalize"
-              value={postTitle}
-              onChange={(e) => setPostTitle(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button className=" p-4 bg-[rgb(10,93,113)] text-white">
               Search
@@ -66,8 +75,18 @@ const Home = () => {
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
             />
-            <input type="text" name="Firstname" placeholder="First Name" className=" p-3 capitalize" />
-            <input type="text" name="Lastname" placeholder="Last Name" className=" p-3 capitalize" />
+            <input
+              type="text"
+              name="Firstname"
+              placeholder="First Name"
+              className=" p-3 capitalize"
+            />
+            <input
+              type="text"
+              name="Lastname"
+              placeholder="Last Name"
+              className=" p-3 capitalize"
+            />
 
             <div>
               <input type="file" name="file" className=" text-[#FFF] P-10" />
@@ -77,9 +96,9 @@ const Home = () => {
           </form>
         </div>
 
-        {/* Display user data */}
+        {/* Display filtered user data */}
         <div className="text-white">
-          {userData.map((user) => (
+          {filteredData.map((user) => (
             <div key={user.id}>
               <p>Title: {user.title}</p>
               <p>firstName: {user.firstName}</p>
