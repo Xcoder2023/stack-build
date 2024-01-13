@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import icon from "./assets/delete.png"
 
 const itemsPerPage = 5;
 
 const Home = () => {
   const [toggle, setToggle] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -12,6 +14,7 @@ const Home = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleToggle = () => setToggle(!toggle);
+  const handleUpdate = () => setUpdate(!update);
 
   // GET_USER
   const fetchData = async () => {
@@ -114,6 +117,8 @@ const Home = () => {
             </button>
           </div>
         </div>
+          
+          {/* creating new post */}
 
         <div className={toggle ? "newpost active " : "newpost"}>
           <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
@@ -149,6 +154,39 @@ const Home = () => {
           </form>
         </div>
 
+        {/* updating  a post */}
+      <div className={update ? "newpost active " : "newpost"}>
+        <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
+          <p onClick={handleUpdate} className=" text-[red] cursor-pointer flex justify-end"><img src={icon} alt="" className=" w-8" /></p>
+          <input
+            type="text"
+            placeholder="Tittle"
+            className=" p-4 capitalize"
+            required
+          />
+          <input
+            type="text"
+            placeholder="First Name"
+            className=" p-4 capitalize"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            className=" p-4 capitalize"
+            required
+          />
+          <input
+            type="file"
+            placeholder="upload image"
+            className=" p-4 text-white"
+            required
+          />
+          
+          <button className=" bg-[rgb(253,202,209)] p-3">Update Post</button>
+        </form>
+        </div>
+
         {successMessage && (
           <div className="text-[red] text-center mt-4">{successMessage}</div>
         )}
@@ -173,11 +211,11 @@ const Home = () => {
                   onClick={() => {
                     deleteUser(user.id);
                   }}
-                  className=" bg-[red] p-1 rounded-md"
+                  className=" bg-[red] p-1 rounded-md capitalize"
                 >
                   delete post
                 </button>
-                <button className=" bg-[rgb(10,93,113)] p-1 rounded-md">
+                <button className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize" onClick={handleUpdate}>
                   update post
                 </button>
               </div>
