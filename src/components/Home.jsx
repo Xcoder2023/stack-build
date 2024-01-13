@@ -47,24 +47,25 @@ const Home = () => {
   return (
     <>
       <div className=" bg-[url('/src/components/assets/skyblue.jpeg')] bg-center bg-cover bg-no-repeat h-[100vh] w-[100%]">
-        <div className=" flex flex-col gap-10 pt-10">
-          <div className=" flex justify-center pt-[3rem]">
+        <p className=" flex text-center justify-center text-[rgb(10,93,113)] pt-5">STACKBUILD BLOGG APP</p>
+        <div className=" flex justify-center items-center gap-10 pt-[5rem]">
+          <div className=" flex justify-center">
             <input
               type="text"
               placeholder="Enter post title"
               required
-              className=" p-4 border-none w-[30%] capitalize"
+              className=" p-4 border-none  capitalize h-11 w-96"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className=" p-4 bg-[rgb(10,93,113)] text-white">
+            <button className=" flex p-3  bg-[rgb(10,93,113)] text-white text-center h-11">
               Search
             </button>
           </div>
 
           <div className=" flex justify-center">
             <button
-              className=" bg-[rgb(10,93,113)] p-3 text-white text-center hover:underline"
+              className=" bg-[rgb(10,93,113)] p-3 text-white text-center h-11 rounded-md hover:underline"
               onClick={handleToggle}
             >
               + New Post
@@ -107,13 +108,28 @@ const Home = () => {
         </div>
 
         {/* Display filtered user data */}
-        <div className="text-white flex flex-wrap">
+        <div className="text-white flex flex-wrap mt-24">
           {currentItems.map((user) => (
-            <div key={user.id} className="w-1/5 p-4">
-              <p>Title: {user.title}</p>
-              <p>firstName: {user.firstName}</p>
-              <p>lastName: {user.lastName}</p>
-              <img src={user.picture} alt={user.lastName} />
+            <div
+              key={user.id}
+              className="w-1/5 p-4 flex flex-col items-center gap-2"
+            >
+              <img
+                src={user.picture}
+                alt={user.lastName}
+                className=" w-32 rounded-xl"
+              />
+              <p className="capitalize">
+                Name: {user.title} {user.firstName} {user.lastName}
+              </p>
+              <div className=" flex gap-5">
+                <button className=" bg-[red] p-1 rounded-md">
+                  delete post
+                </button>
+                <button className=" bg-[rgb(10,93,113)] p-1 rounded-md">
+                  update post
+                </button>
+              </div>
             </div>
           ))}
         </div>
