@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 
+const itemsPerPage = 5;
+
 const Home = () => {
   const [toggle, setToggle] = useState(false);
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [postTitle, setPostTitle] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleToggle = () => setToggle(!toggle);
 
@@ -32,7 +35,14 @@ const Home = () => {
       user.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filteredResults);
+    setCurrentPage(1);
   }, [searchQuery, userData]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -69,8 +79,8 @@ const Home = () => {
             </p>
             <input
               type="text"
-              placeholder="Enter Your post title"
-              className=" p-5 capitalize text-center"
+              placeholder="title"
+              className=" p-5 capitalize"
               required
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
@@ -97,15 +107,32 @@ const Home = () => {
         </div>
 
         {/* Display filtered user data */}
-        <div className="text-white">
-          {filteredData.map((user) => (
-            <div key={user.id}>
+        <div className="text-white flex flex-wrap">
+          {currentItems.map((user) => (
+            <div key={user.id} className="w-1/5 p-4">
               <p>Title: {user.title}</p>
               <p>firstName: {user.firstName}</p>
               <p>lastName: {user.lastName}</p>
               <img src={user.picture} alt={user.lastName} />
             </div>
           ))}
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="bg-[rgb(10,93,113)] p-3 text-white text-center hover:underline mx-2"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={indexOfLastItem >= filteredData.length}
+            className="bg-[rgb(10,93,113)] p-3 text-white text-center hover:underline mx-2"
+          >
+            Next
+          </button>
         </div>
       </div>
     </>
