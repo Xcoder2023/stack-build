@@ -20,5 +20,5 @@ body {
   z-index: 10;
 }
 .newpost.active {
-  left: 40%;
+  left: 20%;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import icon from "./assets/delete.png"
+import icon from "./assets/delete.png";
 
 const itemsPerPage = 5;
 
@@ -50,7 +50,6 @@ const Home = () => {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
 
   // DELETE_USER
   const deleteUser = async (userId) => {
@@ -117,74 +116,139 @@ const Home = () => {
             </button>
           </div>
         </div>
-          
-          {/* creating new post */}
+
+        {/* creating new post form */}
 
         <div className={toggle ? "newpost active " : "newpost"}>
           <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
             <p className=" text-center text-[rgb(250,254,162)]">
               Create a new post
             </p>
-            <input
-              type="text"
-              placeholder="title"
-              className=" p-5 capitalize"
-              required
-              value={postTitle}
-              onChange={(e) => setPostTitle(e.target.value)}
-            />
-            <input
-              type="text"
-              name="Firstname"
-              placeholder="First Name"
-              className=" p-3 capitalize"
-            />
-            <input
-              type="text"
-              name="Lastname"
-              placeholder="Last Name"
-              className=" p-3 capitalize"
-            />
 
-            <div>
-              <input type="file" name="file" className=" text-[#FFF] P-10" />
+            <div className=" flex gap-5">
+              <div className=" flex flex-col gap-5">
+                <input
+                  type="text"
+                  placeholder="title"
+                  className=" p-3 capitalize"
+                  required
+                  value={postTitle}
+                  onChange={(e) => setPostTitle(e.target.value)}
+                />
+                <input
+                  type="text"
+                  name="Firstname"
+                  placeholder="First Name"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="text"
+                  name="Lastname"
+                  placeholder="Last Name"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="file"
+                  placeholder="upload image"
+                  className=" p- text-white"
+                  required
+                />
+              </div>
+
+              <div className=" flex flex-col gap-5">
+                  <select name="gender" id="gender" className=" p-3">
+                    <option value="">Gender</option>
+                    <option value="">Male</option>
+                    <option value="">Female</option>
+                    <option value="">Other</option>
+                  </select>
+                
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Adress"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="date"
+                  name="DOB"
+                  className=" p-3"
+                />
+                 <input
+                  type="tel"
+                  name="phone"
+                  placeholder="phone number"
+                  className=" p-3"
+                />
+              </div>
+              <div className=" flex flex-col gap-5">
+              <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="text"
+                  name="state"
+                  placeholder="State"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="time"
+                  name="time"
+                  placeholder="Time Zone"
+                  className=" p-3 capitalize"
+                />
+              </div>
             </div>
 
-            <button className=" bg-[rgb(253,202,209)]">Add Post</button>
+            <button className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center">Add Post</button>
           </form>
         </div>
 
         {/* updating  a post */}
-      <div className={update ? "newpost active " : "newpost"}>
-        <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
-          <p onClick={handleUpdate} className=" text-[red] cursor-pointer flex justify-end"><img src={icon} alt="" className=" w-8" /></p>
-          <input
-            type="text"
-            placeholder="Tittle"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="text"
-            placeholder="First Name"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="file"
-            placeholder="upload image"
-            className=" p-4 text-white"
-            required
-          />
-          
-          <button className=" bg-[rgb(253,202,209)] p-3">Update Post</button>
-        </form>
+        <div className={update ? "newpost active " : "newpost"}>
+          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
+            <p
+              onClick={handleUpdate}
+              className=" text-[red] cursor-pointer flex justify-end"
+            >
+              <img src={icon} alt="" className=" w-8" />
+            </p>
+            <input
+              type="text"
+              placeholder="Tittle"
+              className=" p-4 capitalize"
+              required
+            />
+            <input
+              type="text"
+              placeholder="First Name"
+              className=" p-4 capitalize"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              className=" p-4 capitalize"
+              required
+            />
+            <input
+              type="file"
+              placeholder="upload image"
+              className=" p-4 text-white"
+              required
+            />
+
+            <button className=" bg-[rgb(253,202,209)] p-3">Update Post</button>
+          </form>
         </div>
 
         {successMessage && (
@@ -215,7 +279,10 @@ const Home = () => {
                 >
                   delete post
                 </button>
-                <button className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize" onClick={handleUpdate}>
+                <button
+                  className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize"
+                  onClick={handleUpdate}
+                >
                   update post
                 </button>
               </div>
