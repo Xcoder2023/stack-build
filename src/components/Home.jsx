@@ -12,11 +12,7 @@ const Home = () => {
   const [postTitle, setPostTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
-  const [updatePostData, setUpdatePostData] = useState({
-    title: "",
-    firstName: "",
-    lastName: "",
-  });
+  const [updatePostData, setUpdatePostData] = useState("");
 
   const handleToggle = () => setToggle(!toggle);
   const handleUpdate = () => setUpdate(!update);
@@ -194,25 +190,21 @@ const Home = () => {
               </div>
 
               <div className=" flex flex-col gap-5">
-                  <select name="gender" id="gender" className=" p-3">
-                    <option value="">Gender</option>
-                    <option value="">Male</option>
-                    <option value="">Female</option>
-                    <option value="">Other</option>
-                  </select>
-                
+                <select name="gender" id="gender" className=" p-3">
+                  <option value="">Gender</option>
+                  <option value="">Male</option>
+                  <option value="">Female</option>
+                  <option value="">Other</option>
+                </select>
+
                 <input
                   type="email"
                   name="email"
                   placeholder="Email Adress"
                   className=" p-3 capitalize"
                 />
+                <input type="date" name="DOB" className=" p-3" />
                 <input
-                  type="date"
-                  name="DOB"
-                  className=" p-3"
-                />
-                 <input
                   type="tel"
                   name="phone"
                   placeholder="phone number"
@@ -220,25 +212,25 @@ const Home = () => {
                 />
               </div>
               <div className=" flex flex-col gap-5">
-              <input
+                <input
                   type="text"
                   name="city"
                   placeholder="City"
                   className=" p-3 capitalize"
                 />
-                  <input
+                <input
                   type="text"
                   name="state"
                   placeholder="State"
                   className=" p-3 capitalize"
                 />
-                  <input
+                <input
                   type="text"
                   name="country"
                   placeholder="Country"
                   className=" p-3 capitalize"
                 />
-                  <input
+                <input
                   type="time"
                   name="time"
                   placeholder="Time Zone"
@@ -247,7 +239,9 @@ const Home = () => {
               </div>
             </div>
 
-            <button className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center">Add Post</button>
+            <button className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center">
+              Add Post
+            </button>
           </form>
         </div>
 
@@ -302,16 +296,20 @@ const Home = () => {
               placeholder="Upload Image"
               className="p-4 text-white"
             />
-            
+
             <button
               className="bg-[rgb(253,202,209)] p-3"
-              onClick={() => updateUser(updatePostData.id)}
+              onClick={() => updateUser({
+                title: updatePostData.title,
+                firstName: updatePostData.firstName,
+                lastName: updatePostData.lastName
+              })}
             >
-              Update Post
+              Update
             </button>
           </form>
         </div>
-              
+
         {successMessage && (
           <div className="text-[red] text-center mt-4">{successMessage}</div>
         )}
@@ -341,8 +339,15 @@ const Home = () => {
                   delete post
                 </button>
                 <button
-                  className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize"
-                  onClick={handleUpdate}
+                  className="bg-[rgb(10,93,113)] p-1 rounded-md capitalize"
+                  onClick={() => {
+                    setUpdatePostData({
+                      title: user.title,
+                      firstName: user.firstName,
+                      lastName: user.lastName
+                    });
+                    handleUpdate();
+                  }}
                 >
                   update post
                 </button>
