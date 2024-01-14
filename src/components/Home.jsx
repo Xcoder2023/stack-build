@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import icon from "./assets/delete.png"
+import icon from "./assets/delete.png";
 
 const itemsPerPage = 5;
 
@@ -12,6 +12,11 @@ const Home = () => {
   const [postTitle, setPostTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
+  const [updatePostData, setUpdatePostData] = useState({
+    title: "",
+    firstName: "",
+    lastName: "",
+  });
 
   const handleToggle = () => setToggle(!toggle);
   const handleUpdate = () => setUpdate(!update);
@@ -51,6 +56,38 @@ const Home = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Update User
+  const updateUser = async (userId) => {
+    try {
+      const response = await fetch(
+        `https://dummyapi.io/data/v1/user/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "app-id": "65a19335e135fe610e0131e7",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatePostData),
+        }
+      );
+
+      if (response.ok) {
+        setSuccessMessage("User updated successfully");
+        fetchData();
+        setUpdatePostData({
+          title: "",
+          firstName: "",
+          lastName: "",
+        });
+      } else {
+        console.error("Error updating user:", response.statusText);
+        setSuccessMessage("Error updating user");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error.message);
+      setSuccessMessage("Error updating user");
+    }
+  };
 
   // DELETE_USER
   const deleteUser = async (userId) => {
@@ -117,8 +154,8 @@ const Home = () => {
             </button>
           </div>
         </div>
-          
-          {/* creating new post */}
+
+        {/* creating new post */}
 
         <div className={toggle ? "newpost active " : "newpost"}>
           <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
@@ -155,38 +192,66 @@ const Home = () => {
         </div>
 
         {/* updating  a post */}
-      <div className={update ? "newpost active " : "newpost"}>
-        <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
-          <p onClick={handleUpdate} className=" text-[red] cursor-pointer flex justify-end"><img src={icon} alt="" className=" w-8" /></p>
-          <input
-            type="text"
-            placeholder="Tittle"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="text"
-            placeholder="First Name"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            className=" p-4 capitalize"
-            required
-          />
-          <input
-            type="file"
-            placeholder="upload image"
-            className=" p-4 text-white"
-            required
-          />
-          
-          <button className=" bg-[rgb(253,202,209)] p-3">Update Post</button>
-        </form>
+        <div className={update ? "newpost active " : "newpost"}>
+          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
+            <p
+              onClick={handleUpdate}
+              className=" text-[red] cursor-pointer flex justify-end"
+            >
+              <img src={icon} alt="" className=" w-8" />
+            </p>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              className="p-4 capitalize"
+              value={updatePostData.title}
+              onChange={(e) =>
+                setUpdatePostData({ ...updatePostData, title: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              className="p-4 capitalize"
+              value={updatePostData.firstName}
+              onChange={(e) =>
+                setUpdatePostData({
+                  ...updatePostData,
+                  firstName: e.target.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              className="p-4 capitalize"
+              value={updatePostData.lastName}
+              onChange={(e) =>
+                setUpdatePostData({
+                  ...updatePostData,
+                  lastName: e.target.value,
+                })
+              }
+            />
+            <input
+              type="file"
+              name="upload"
+              placeholder="Upload Image"
+              className="p-4 text-white"
+            />
+            
+            <button
+              className="bg-[rgb(253,202,209)] p-3"
+              onClick={() => updateUser(updatePostData.id)}
+            >
+              Update Post
+            </button>
+          </form>
         </div>
-
+              
         {successMessage && (
           <div className="text-[red] text-center mt-4">{successMessage}</div>
         )}
@@ -215,7 +280,10 @@ const Home = () => {
                 >
                   delete post
                 </button>
-                <button className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize" onClick={handleUpdate}>
+                <button
+                  className=" bg-[rgb(10,93,113)] p-1 rounded-md capitalize"
+                  onClick={handleUpdate}
+                >
                   update post
                 </button>
               </div>
