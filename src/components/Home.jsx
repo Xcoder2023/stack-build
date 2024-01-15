@@ -297,16 +297,18 @@ const Home = () => {
               className="p-4 text-white"
             />
 
-            <button
+            {/* <button
               className="bg-[rgb(253,202,209)] p-3"
-              onClick={() => updateUser({
-                title: updatePostData.title,
-                firstName: updatePostData.firstName,
-                lastName: updatePostData.lastName
-              })}
+              onClick={() =>
+                updateUser({
+                  title: updatePostData.title,
+                  firstName: updatePostData.firstName,
+                  lastName: updatePostData.lastName,
+                })
+              }
             >
               Update
-            </button>
+            </button> */}
           </form>
         </div>
 
@@ -344,12 +346,18 @@ const Home = () => {
                     setUpdatePostData({
                       title: user.title,
                       firstName: user.firstName,
-                      lastName: user.lastName
+                      lastName: user.lastName,
                     });
                     handleUpdate();
                   }}
                 >
                   update post
+                </button>
+                <button
+                  className="bg-[rgb(253,202,209)] p-3"
+                  onClick={() => updateUser(user)}
+                >
+                  Update
                 </button>
               </div>
             </div>
