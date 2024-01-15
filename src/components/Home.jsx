@@ -12,6 +12,7 @@ const Home = () => {
   const [postTitle, setPostTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
+  const [firstName, setFirstName] = useState('')
 
   const handleToggle = () => setToggle(!toggle);
   const handleUpdate = () => setUpdate(!update);
@@ -25,6 +26,7 @@ const Home = () => {
         },
       });
       const data = await response.json();
+      console.log(data, 'my data');
       setUserData(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -140,6 +142,8 @@ const Home = () => {
                   name="Firstname"
                   placeholder="First Name"
                   className=" p-3 capitalize"
+                  value={firstName}
+                  onChange={(e)=>setFirstName(e.target.value)}
                 />
                 <input
                   type="text"
