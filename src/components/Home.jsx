@@ -155,39 +155,99 @@ const Home = () => {
           </div>
         </div>
 
-        {/* creating new post */}
+        {/* creating new post form */}
 
         <div className={toggle ? "newpost active " : "newpost"}>
           <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
             <p className=" text-center text-[rgb(250,254,162)]">
               Create a new post
             </p>
-            <input
-              type="text"
-              placeholder="title"
-              className=" p-5 capitalize"
-              required
-              value={postTitle}
-              onChange={(e) => setPostTitle(e.target.value)}
-            />
-            <input
-              type="text"
-              name="Firstname"
-              placeholder="First Name"
-              className=" p-3 capitalize"
-            />
-            <input
-              type="text"
-              name="Lastname"
-              placeholder="Last Name"
-              className=" p-3 capitalize"
-            />
 
-            <div>
-              <input type="file" name="file" className=" text-[#FFF] P-10" />
+            <div className=" flex gap-5">
+              <div className=" flex flex-col gap-5">
+                <input
+                  type="text"
+                  placeholder="title"
+                  className=" p-3 capitalize"
+                  required
+                  value={postTitle}
+                  onChange={(e) => setPostTitle(e.target.value)}
+                />
+                <input
+                  type="text"
+                  name="Firstname"
+                  placeholder="First Name"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="text"
+                  name="Lastname"
+                  placeholder="Last Name"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="file"
+                  placeholder="upload image"
+                  className=" p- text-white"
+                  required
+                />
+              </div>
+
+              <div className=" flex flex-col gap-5">
+                  <select name="gender" id="gender" className=" p-3">
+                    <option value="">Gender</option>
+                    <option value="">Male</option>
+                    <option value="">Female</option>
+                    <option value="">Other</option>
+                  </select>
+                
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Adress"
+                  className=" p-3 capitalize"
+                />
+                <input
+                  type="date"
+                  name="DOB"
+                  className=" p-3"
+                />
+                 <input
+                  type="tel"
+                  name="phone"
+                  placeholder="phone number"
+                  className=" p-3"
+                />
+              </div>
+              <div className=" flex flex-col gap-5">
+              <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="text"
+                  name="state"
+                  placeholder="State"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  className=" p-3 capitalize"
+                />
+                  <input
+                  type="time"
+                  name="time"
+                  placeholder="Time Zone"
+                  className=" p-3 capitalize"
+                />
+              </div>
             </div>
 
-            <button className=" bg-[rgb(253,202,209)]">Add Post</button>
+            <button className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center">Add Post</button>
           </form>
         </div>
 
