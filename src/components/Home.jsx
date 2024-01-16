@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import icon from "./assets/delete.png";
 
-const itemsPerPage = 5;
+const itemsPerPage = 4;
 
 const Home = () => {
   const [toggle, setToggle] = useState(false);
@@ -26,6 +26,7 @@ const Home = () => {
         },
       });
       const data = await response.json();
+      console.log(data, 'my data');
       setUserData(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -122,17 +123,17 @@ const Home = () => {
 
   return (
     <>
-      <div className=" bg-[url('/src/components/assets/skyblue.jpeg')] bg-center bg-cover bg-no-repeat h-[100vh] w-[100%]">
+      <div className=" bg-[url('/src/components/assets/skyblue.jpeg')] bg-center bg-cover bg-no-repeat h-[100%] lg:h-[100vh] w-[100%]">
         <p className=" flex text-center justify-center text-[rgb(10,93,113)] pt-5">
           STACKBUILD BLOGG APP
         </p>
-        <div className=" flex justify-center items-center gap-10 pt-[5rem]">
+        <div className=" flex flex-col lg:flex-row gap-5 lg:gap-10 justify-center items-center  pt-[3rem] lg:pt-[5rem]">
           <div className=" flex justify-center">
             <input
               type="text"
               placeholder="Enter post title"
               required
-              className=" p-4 border-none  capitalize h-11 w-96"
+              className=" p-4 border-none  capitalize h-11 w-52 lg:w-96"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -153,13 +154,17 @@ const Home = () => {
 
         {/* creating new post form */}
 
-        <div className={toggle ? "newpost active " : "newpost"}>
+        <div className={toggle ? "newpost1 active " : "newpost1"}>
           <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
-            <p className=" text-center text-[rgb(250,254,162)]">
+           
+            <div className=" cursor-pointer flex justify-between">
+            <p className="  text-[rgb(250,254,162)]">
               Create a new post
             </p>
+             <img src={icon} alt="" className=" w-8" onClick={handleToggle}/>
+             </div>
 
-            <div className=" flex gap-5">
+            <div className=" flex flex-col lg:flex-row gap-5">
               <div className=" flex flex-col gap-5">
                 <input
                   type="text"
@@ -174,6 +179,8 @@ const Home = () => {
                   name="Firstname"
                   placeholder="First Name"
                   className=" p-3 capitalize"
+                  value={firstName}
+                  onChange={(e)=>setFirstName(e.target.value)}
                 />
                 <input
                   type="text"
@@ -247,13 +254,11 @@ const Home = () => {
 
         {/* updating  a post */}
         <div className={update ? "newpost active " : "newpost"}>
-          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
-            <p
-              onClick={handleUpdate}
-              className=" text-[red] cursor-pointer flex justify-end"
-            >
-              <img src={icon} alt="" className=" w-8" />
-            </p>
+          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-2">
+             <div className=" cursor-pointer flex justify-end">
+             <img src={icon} alt="" className=" w-8" onClick={handleUpdate}/>
+             </div>
+            
             <input
               type="text"
               name="title"
@@ -317,11 +322,11 @@ const Home = () => {
         )}
 
         {/* Display filtered user data */}
-        <div className="text-white flex flex-wrap mt-24">
+        <div className="text-white grid grid-cols-2 md:grid-cols-3 lg:flex justify-center mt-14 lg:mt-24">
           {currentItems.map((user) => (
             <div
               key={user.id}
-              className="w-1/5 p-4 flex flex-col items-center gap-2"
+              className=" lg:w-1/5 p-4 flex flex-col items-center text-center gap-2"
             >
               <img
                 src={user.picture}
