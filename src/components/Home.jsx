@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import icon from "./assets/delete.png";
 
 const itemsPerPage = 4;
@@ -12,7 +12,15 @@ const Home = () => {
   const [postTitle, setPostTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
-  const [updatePostData, setUpdatePostData] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [userID, setUserID] = useState("");
+  // const [updatePostData, setUpdatePostData] = useState("");
+  const [updatePostData, setUpdatePostData] = useState({
+    title: "",
+    firstName: "",
+    lastName: "",
+    picture: ""
+  });
 
   const handleToggle = () => setToggle(!toggle);
   const handleUpdate = () => setUpdate(!update);
@@ -26,7 +34,7 @@ const Home = () => {
         },
       });
       const data = await response.json();
-      console.log(data, 'my data');
+      // console.log(data, 'my data');
       setUserData(data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -46,39 +54,46 @@ const Home = () => {
     setFilteredData(filteredResults);
     setCurrentPage(1);
   }, [searchQuery, userData]);
-
+  // declear variables for pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Update User
+  // Update User Function
   const updateUser = async (userId) => {
+    console.log("userID: ", userId);
     try {
-      const response = await fetch(
-        `https://dummyapi.io/data/v1/user/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "app-id": "65a19335e135fe610e0131e7",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatePostData),
-        }
-      );
+      if (userId) {
+        const response = await fetch(
+          `https://dummyapi.io/data/v1/user/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              "app-id": "65a19335e135fe610e0131e7",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatePostData),
+          }
+        );
 
-      if (response.ok) {
-        setSuccessMessage("User updated successfully");
-        fetchData();
-        setUpdatePostData({
-          title: "",
-          firstName: "",
-          lastName: "",
-        });
+        if (response.ok) {
+          setSuccessMessage("User updated successfully");
+          fetchData();
+          setUpdatePostData({
+            title: "",
+            firstName: "",
+            lastName: "",
+            picture: ""
+          });
+          setUserID("");
+        } else {
+          console.error("Error updating user:", response.statusText);
+          setSuccessMessage("Error updating user");
+        }
       } else {
-        console.error("Error updating user:", response.statusText);
-        setSuccessMessage("Error updating user");
+        console.log("No user ID");
       }
     } catch (error) {
       console.error("Error updating user:", error.message);
@@ -86,7 +101,7 @@ const Home = () => {
     }
   };
 
-  // DELETE_USER
+  // DELETE_USER FUNCTION
   const deleteUser = async (userId) => {
     try {
       const response = await fetch(
@@ -112,7 +127,7 @@ const Home = () => {
       setSuccessMessage("Error deleting user");
     }
   };
-
+  // SET SUCCESS MESSAGE TIME OUT
   useEffect(() => {
     const timer = setTimeout(() => {
       setSuccessMessage("");
@@ -123,6 +138,7 @@ const Home = () => {
 
   return (
     <>
+      {/* UI design starts here */}
       <div className=" bg-[url('/src/components/assets/skyblue.jpeg')] bg-center bg-cover bg-no-repeat h-[100%] lg:h-[100vh] w-[100%]">
         <p className=" flex text-center justify-center text-[rgb(10,93,113)] pt-5">
           STACKBUILD BLOGG APP
@@ -154,15 +170,14 @@ const Home = () => {
 
         {/* creating new post form */}
 
-        <div className={toggle ? "newpost1 active " : "newpost1"}>
-          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-5">
-           
+        <div
+          className={toggle ? "newpost1 active " : "newpost1 overflow-hidden"}
+        >
+          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-3 overflow-hidden">
             <div className=" cursor-pointer flex justify-between">
-            <p className="  text-[rgb(250,254,162)]">
-              Create a new post
-            </p>
-             <img src={icon} alt="" className=" w-8" onClick={handleToggle}/>
-             </div>
+              <p className="  text-[rgb(250,254,162)]">Create a new post</p>
+              <img src={icon} alt="" className=" w-8" onClick={handleToggle} />
+            </div>
 
             <div className=" flex flex-col lg:flex-row gap-5">
               <div className=" flex flex-col gap-5">
@@ -180,7 +195,7 @@ const Home = () => {
                   placeholder="First Name"
                   className=" p-3 capitalize"
                   value={firstName}
-                  onChange={(e)=>setFirstName(e.target.value)}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
                 <input
                   type="text"
@@ -210,7 +225,12 @@ const Home = () => {
                   placeholder="Email Adress"
                   className=" p-3 capitalize"
                 />
-                <input type="date" name="DOB" className=" p-3" />
+                <input
+                  type="date"
+                  name="date"
+                  className="p-3 w-[100%] bg-gray-300"
+                  placeholder="DOB"
+                />
                 <input
                   type="tel"
                   name="phone"
@@ -241,7 +261,7 @@ const Home = () => {
                   type="time"
                   name="time"
                   placeholder="Time Zone"
-                  className=" p-3 capitalize"
+                  className="p-3 capitalize w-[100%]"
                 />
               </div>
             </div>
@@ -253,12 +273,12 @@ const Home = () => {
         </div>
 
         {/* updating  a post */}
-        <div className={update ? "newpost active " : "newpost"}>
-          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-2">
-             <div className=" cursor-pointer flex justify-end">
-             <img src={icon} alt="" className=" w-8" onClick={handleUpdate}/>
-             </div>
-            
+        <div className={update ? "newpost active " : "newpost overflow-hidden"}>
+          <form className="  bg-[rgb(10,93,113)] flex flex-col gap-5 p-1 overflow-hidden">
+            <div className=" cursor-pointer flex justify-end pr-10 mb-[-10px]">
+              <img src={icon} alt="" className=" w-7" onClick={handleUpdate} />
+            </div>
+
             <input
               type="text"
               name="title"
@@ -300,20 +320,21 @@ const Home = () => {
               name="upload"
               placeholder="Upload Image"
               className="p-4 text-white"
-            />
-
-            {/* <button
-              className="bg-[rgb(253,202,209)] p-3"
-              onClick={() =>
-                updateUser({
-                  title: updatePostData.title,
-                  firstName: updatePostData.firstName,
-                  lastName: updatePostData.lastName,
+              value={updatePostData.picture}
+              onChange={(e) =>
+                setUpdatePostData({
+                  ...updatePostData,
+                  picture: e.target.value,
                 })
               }
+            />
+
+            <button
+              className="bg-[rgb(253,202,209)] p-3"
+              onClick={() => updateUser(userID)}
             >
               Update
-            </button> */}
+            </button>
           </form>
         </div>
 
@@ -353,23 +374,18 @@ const Home = () => {
                       firstName: user.firstName,
                       lastName: user.lastName,
                     });
+                    setUserID(user.id);
                     handleUpdate();
                   }}
                 >
                   update post
-                </button>
-                <button
-                  className="bg-[rgb(253,202,209)] p-3"
-                  onClick={() => updateUser(user)}
-                >
-                  Update
                 </button>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 pb-10 lg:pb-0">
           <button
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
