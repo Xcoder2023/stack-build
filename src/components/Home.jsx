@@ -119,22 +119,28 @@ const Home = () => {
     }
   };
 
-  // create user
+  // Create user
+
   const createUser = async () => {
     try {
-      const response = await fetch(`https://dummyapi.io/data/v1/user/create`, {
+      const formData = new FormData();
+      formData.append("title", createPostData.title);
+      formData.append("firstName", createPostData.firstName);
+      formData.append("lastName", createPostData.lastName);
+      formData.append("picture", createPostData.picture);
+      formData.append("gender", createPostData.gender);
+
+      const response = await fetch("https://dummyapi.io/data/v1/user/create", {
         method: "POST",
         headers: {
           "app-id": "65a19335e135fe610e0131e7",
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(createPostData),
+        body: formData,
       });
-      
+
       if (response.ok) {
-        setSuccessMessage("User create successfully");
-        // fetchData();
-        currentItems.parse(createPostData)
+        setSuccessMessage("User created successfully");
+        fetchData();
         setCreatePostData({
           title: "",
           firstName: "",
@@ -152,6 +158,7 @@ const Home = () => {
             timezone: "",
           },
         });
+        window.alert("User created successfully");
       } else {
         console.error("Error creating user:", response.statusText);
         setSuccessMessage("Error creating user");
@@ -161,6 +168,7 @@ const Home = () => {
       setSuccessMessage("Error creating user");
     }
   };
+
   // SET SUCCESS MESSAGE TIME OUT
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -293,11 +301,10 @@ const Home = () => {
                   type="file"
                   placeholder="upload image"
                   className=" p- text-white"
-                  value={createPostData.picture}
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
-                      picture: e.target.value,
+                      picture: e.target.files[0],
                     })
                   }
                 />
@@ -316,10 +323,9 @@ const Home = () => {
                     })
                   }
                 >
-                  <option value="">Gender</option>
-                  <option value="">Male</option>
-                  <option value="">Female</option>
-                  <option value="">Other</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
 
                 <input
@@ -340,7 +346,7 @@ const Home = () => {
                   name="date"
                   className="p-3 w-[100%] bg-gray-300"
                   placeholder="DOB"
-                  value={createPostData.DOB}
+                  value={createPostData.dateOfBirth}
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
@@ -372,7 +378,10 @@ const Home = () => {
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
-                      location: e.target.value,
+                      location: {
+                        ...createPostData.location,
+                        city: e.target.value,
+                      },
                     })
                   }
                 />
@@ -385,7 +394,10 @@ const Home = () => {
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
-                      location: e.target.value,
+                      location: {
+                        ...createPostData.location,
+                        state: e.target.value,
+                      },
                     })
                   }
                 />
@@ -398,20 +410,26 @@ const Home = () => {
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
-                      location: e.target.value,
+                      location: {
+                        ...createPostData.location,
+                        country: e.target.value,
+                      },
                     })
                   }
                 />
                 <input
-                  type="time"
-                  name="time"
+                  type="text"
+                  name="timezone"
                   placeholder="Time Zone"
                   className="p-3 capitalize w-[100%]"
                   value={createPostData.location.timezone}
                   onChange={(e) =>
                     setCreatePostData({
                       ...createPostData,
-                      location: e.target.value,
+                      location: {
+                        ...createPostData.location,
+                        timezone: e.target.value,
+                      },
                     })
                   }
                 />
@@ -419,6 +437,7 @@ const Home = () => {
             </div>
 
             <button
+              type="button"
               className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center"
               onClick={createUser}
             >
