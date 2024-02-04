@@ -9,17 +9,35 @@ const Home = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [postTitle, setPostTitle] = useState("");
+  // const [postTitle, setPostTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState("");
-  const [firstName, setFirstName] = useState("");
+  // const [firstName, setFirstName] = useState("");
   const [userID, setUserID] = useState("");
   // const [updatePostData, setUpdatePostData] = useState("");
   const [updatePostData, setUpdatePostData] = useState({
     title: "",
     firstName: "",
     lastName: "",
-    picture: ""
+    picture: "",
+  });
+
+  const [createPostData, setCreatePostData] = useState({
+    title: "",
+    firstName: "",
+    lastName: "",
+    picture: "",
+    gender: "",
+    dateOfBirth: "",
+    email: "",
+    phone: "",
+    location: {
+      street: "",
+      city: "",
+      state: "",
+      country: "",
+      timezone: "",
+    },
   });
 
   const handleToggle = () => setToggle(!toggle);
@@ -85,7 +103,7 @@ const Home = () => {
             title: "",
             firstName: "",
             lastName: "",
-            picture: ""
+            picture: "",
           });
           setUserID("");
         } else {
@@ -100,6 +118,65 @@ const Home = () => {
       setSuccessMessage("Error updating user");
     }
   };
+
+  // Create user
+
+  const createUser = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("title", createPostData.title);
+      formData.append("firstName", createPostData.firstName);
+      formData.append("lastName", createPostData.lastName);
+      formData.append("picture", createPostData.picture);
+      formData.append("gender", createPostData.gender);
+
+      const response = await fetch("https://dummyapi.io/data/v1/user/create", {
+        method: "POST",
+        headers: {
+          "app-id": "65a19335e135fe610e0131e7",
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setSuccessMessage("User created successfully");
+        fetchData();
+        setCreatePostData({
+          title: "",
+          firstName: "",
+          lastName: "",
+          picture: "",
+          gender: "",
+          dateOfBirth: "",
+          email: "",
+          phone: "",
+          location: {
+            street: "",
+            city: "",
+            state: "",
+            country: "",
+            timezone: "",
+          },
+        });
+        window.alert("User created successfully");
+      } else {
+        console.error("Error creating user:", response.statusText);
+        setSuccessMessage("Error creating user");
+      }
+    } catch (error) {
+      console.error("Error creating user:", error.message);
+      setSuccessMessage("Error creating user");
+    }
+  };
+
+  // SET SUCCESS MESSAGE TIME OUT
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [successMessage]);
 
   // DELETE_USER FUNCTION
   const deleteUser = async (userId) => {
@@ -186,37 +263,69 @@ const Home = () => {
                   placeholder="title"
                   className=" p-3 capitalize"
                   required
-                  value={postTitle}
-                  onChange={(e) => setPostTitle(e.target.value)}
+                  value={createPostData.title}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      title: e.target.value,
+                    })
+                  }
                 />
                 <input
                   type="text"
                   name="Firstname"
                   placeholder="First Name"
                   className=" p-3 capitalize"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={createPostData.firstName}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      firstName: e.target.value,
+                    })
+                  }
                 />
                 <input
                   type="text"
                   name="Lastname"
                   placeholder="Last Name"
                   className=" p-3 capitalize"
+                  value={createPostData.lastName}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      lastName: e.target.value,
+                    })
+                  }
                 />
                 <input
                   type="file"
                   placeholder="upload image"
                   className=" p- text-white"
-                  required
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      picture: e.target.files[0],
+                    })
+                  }
                 />
               </div>
 
               <div className=" flex flex-col gap-5">
-                <select name="gender" id="gender" className=" p-3">
-                  <option value="">Gender</option>
-                  <option value="">Male</option>
-                  <option value="">Female</option>
-                  <option value="">Other</option>
+                <select
+                  name="gender"
+                  id="gender"
+                  className=" p-3"
+                  value={createPostData.gender}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      gender: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
 
                 <input
@@ -224,18 +333,39 @@ const Home = () => {
                   name="email"
                   placeholder="Email Adress"
                   className=" p-3 capitalize"
+                  value={createPostData.email}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      email: e.target.value,
+                    })
+                  }
                 />
                 <input
                   type="date"
                   name="date"
                   className="p-3 w-[100%] bg-gray-300"
                   placeholder="DOB"
+                  value={createPostData.dateOfBirth}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      DOB: e.target.value,
+                    })
+                  }
                 />
                 <input
                   type="tel"
                   name="phone"
                   placeholder="phone number"
                   className=" p-3"
+                  value={createPostData.phone}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      phone: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className=" flex flex-col gap-5">
@@ -244,29 +374,73 @@ const Home = () => {
                   name="city"
                   placeholder="City"
                   className=" p-3 capitalize"
+                  value={createPostData.location.city}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      location: {
+                        ...createPostData.location,
+                        city: e.target.value,
+                      },
+                    })
+                  }
                 />
                 <input
                   type="text"
                   name="state"
                   placeholder="State"
                   className=" p-3 capitalize"
+                  value={createPostData.location.state}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      location: {
+                        ...createPostData.location,
+                        state: e.target.value,
+                      },
+                    })
+                  }
                 />
                 <input
                   type="text"
                   name="country"
                   placeholder="Country"
                   className=" p-3 capitalize"
+                  value={createPostData.location.country}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      location: {
+                        ...createPostData.location,
+                        country: e.target.value,
+                      },
+                    })
+                  }
                 />
                 <input
-                  type="time"
-                  name="time"
+                  type="text"
+                  name="timezone"
                   placeholder="Time Zone"
                   className="p-3 capitalize w-[100%]"
+                  value={createPostData.location.timezone}
+                  onChange={(e) =>
+                    setCreatePostData({
+                      ...createPostData,
+                      location: {
+                        ...createPostData.location,
+                        timezone: e.target.value,
+                      },
+                    })
+                  }
                 />
               </div>
             </div>
 
-            <button className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center">
+            <button
+              type="button"
+              className=" bg-[rgb(253,202,209)] flex m-auto p-2 rounded-md w-44 justify-center"
+              onClick={createUser}
+            >
               Add Post
             </button>
           </form>
